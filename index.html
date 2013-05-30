@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+
+<html>
+   <head>
+      <title>Usando a Câmera do Dispositivo Móvel</title>
+      <link rel="stylesheet" href="jquery.mobile-1.0a1.min.css" />
+      <script src="jquery-1.4.3.min.js"></script>
+      <script src="jquery.mobile-1.0a1.min.js"></script>
+      <meta charset="utf-8"/>
+
+      <script type="text/javascript" charset="utf-8" src="cordova-2.7.0.js"></script>
+      <script http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+      </script>
+  </head>
+  <body>
+      <div data-role="page">
+         <div data-role="header">
+            <h1>Usando a Câmera</h1>
+         </div>
+
+       
+         <div data-role="content"> 
+            <h1>Selecione uma opção.</h1>    
+            <button onclick="capturePhoto();">Capturar uma foto</button> <br>
+            <button onclick="capturePhotoEdit();">Capturar uma foto editável</button> <br>
+            <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">Biblioteca de imagens (<i>Photo Library</i>)</button><br>
+            <button onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">Álbum de fotos (<i>Photo Album</i>)</button><br>
+            <p>OBS.: No Android não há direfença entre <i>Photo Library</i> e <i>Photo Album</i></p>
+            <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
+            <img style="display:none;" id="largeImage" src="" />
+         </div>
+         
+         <div data-role="footer">
+            <h4>Desenvolvimento para dispositivos móveis</h4>
+         </div>
+      </div>
+  </body>
+</html>
