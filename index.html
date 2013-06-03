@@ -9,11 +9,62 @@
       <meta charset="utf-8"/>
 
       <script type="text/javascript" charset="utf-8" src="cordova-2.7.0.js"></script>
-      <script http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <script type="text/javascript" charset="utf-8">
+         function inicio() {
+            cameraOptions(0);
+         }
+         function cameraOptions(ST){
+            // As configurações dependem do hardware do DM
+            // Caso alguma configuração não seja suportada pelo DM ela será ignorada
+            // Qualidade da câmera
+            quality: 100; // values [0, 100]. (Number)
+            // Formato da imagem retornada pela câmera (base64 ou URI)
+            // Dê preferência por usar URI
+            destinationType: FILE_URI;
+            // Fonte da imagem (PHOTOLIBRARY=0; CAMERA:1; SAVEDPHOTOALBUM:2)
+            sourceType: ST; // passado como parâmetro
+            // Permite editar a imagem antes da seleção? boolean
+            allowEdit: false
+            // JPGE ou PNG
+            encodingType: JPEG;
+            // Largura em pixels para escalar a imagem (number)
+            targetWidth: 400;
+            // Altura em pixels para escalar a imagem (number)
+            targetHeight: 400;
+            // Permite selecionar o tipo de midia (video, picture, allmedia)
+            mediaType: PICTURE;
+            // Rotaciona a imagem para corrigir pela orientação do DM
+            correctOrientation: true;
+            // Salva a imagem no Photo Album do DM
+            saveToPhotoAlbum: true;
+            // popoverOptions: iOS only options 
+            // Define qual camera usar (front ou back)
+            cameraDirection: BACK;
+         }
+         function capturePhoto() {
+            // Captura imagem usando a camera do DM e recupera a imagem como FILE_URI
+            navigator.camera.getPicture(onPhotoSuccess, onFail, cameraOptions(1));
+         }
+         
+         // Chamado quando uma foto é recuperada com sucesso
+         function onPhotoSuccess(imageURI) {
+            // Descomente a linha abaixo para ver a URI do arquivo da imagem
+            console.log(imageURI);
+
+            // Obtem o cabeçalho da imagem
+            var largeImage = document.getElementById('largeImage');
+
+            // Mostra os elementos da imagem
+            largeImage.style.display = 'block';
+
+            // MOstra a foto capturada
+            // As regras de CSS inline são usadas para alterar o tamanho da imagem
+            largeImage.src = imageURI;
+          }
 
       </script>
   </head>
-  <body>
+  <body onLoad="inicio;()">
       <div data-role="page">
          <div data-role="header">
             <h1>Usando a Câmera</h1>
