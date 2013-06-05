@@ -3,47 +3,90 @@
 <html>
    <head>
       <title>Usando a Câmera do Dispositivo Móvel</title>
+      // Carrega bibliotecas da JQuery Mobile
       <link rel="stylesheet" href="jquery.mobile-1.0a1.min.css" />
       <script src="jquery-1.4.3.min.js"></script>
       <script src="jquery.mobile-1.0a1.min.js"></script>
+      
+      // Configura página de código - charset
       <meta charset="utf-8"/>
-
+      
+      // Carrega biblioteca do PhoneGap - Cordova
       <script type="text/javascript" charset="utf-8" src="cordova-2.7.0.js"></script>
+      
+      // Funções para uso da Câmera
       <script type="text/javascript" charset="utf-8">
          function inicio() {
-            cameraOptions(0);
+            alert("p1");
+            document.addEventListener("deviceready", onDeviceReady, false); // Aguarda o Dispositivo carregar as bibliotecas
+            
+            settings = new Settings();
          }
-         function cameraOptions(ST){
+         
+         function onDeviceReady() {
+            alert("O Show vai começar!");
+         }
+         
+         function Settings(){ // Configurações da Câmera
             // As configurações dependem do hardware do DM
             // Caso alguma configuração não seja suportada pelo DM ela será ignorada
-            // Qualidade da câmera
-            quality: 100; // values [0, 100]. (Number)
-            // Formato da imagem retornada pela câmera (base64 ou URI)
-            // Dê preferência por usar URI
-            destinationType: FILE_URI;
-            // Fonte da imagem (PHOTOLIBRARY=0; CAMERA:1; SAVEDPHOTOALBUM:2)
-            sourceType: ST; // passado como parâmetro
-            // Permite editar a imagem antes da seleção? boolean
-            allowEdit: false
-            // JPGE ou PNG
-            encodingType: JPEG;
-            // Largura em pixels para escalar a imagem (number)
-            targetWidth: 400;
-            // Altura em pixels para escalar a imagem (number)
-            targetHeight: 400;
-            // Permite selecionar o tipo de midia (video, picture, allmedia)
-            mediaType: PICTURE;
-            // Rotaciona a imagem para corrigir pela orientação do DM
-            correctOrientation: true;
-            // Salva a imagem no Photo Album do DM
-            saveToPhotoAlbum: true;
-            // popoverOptions: iOS only options 
+
+                
+            // Opções de inicialização:
+            if ((typeof Camera !== "undefined")) {                 
+               // Formato da imagem retornada pela câmera (base64 ou URI)
+               // Dê preferência por usar FILE_URI
+               this.destinationType = Camera.DestinationType.FILE_URI;     // cameraOptions: destinationType
+               // Fonte da imagem (PHOTOLIBRARY=0; CAMERA:1; SAVEDPHOTOALBUM:2)
+               this.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;    // cameraOptions: sourceType
+               // Permite selecionar o tipo de midia (VIDEO, PICTURE, ALLMEDIA)
+               this.mediaType = Camera.MediaType.PICTURE;                  // cameraOptions: mediaType
+            }
+
+            // Qualidadade da foto e opções de edição:
+            // * Qualidade da câmera
+            this.quality: 100; // values [0, 100]. (Number)
+            // * Largura em pixels para escalar a imagem (number)
+            this.targetWidth: 400;
+            // * Altura em pixels para escalar a imagem (number)
+            this.targetHeight: 400;
+            // * Permite editar a imagem antes da seleção? boolean
+            this.allowEdit: true;
+            // * Rotaciona a imagem para corrigir pela orientação do DM
+            this.correctOrientation: true;
+
+            // Opções para salvamento:
+            // * JPGE ou PNG
+            this.encodingType: (typeof Camera !== "undefined") ? Camera.EncodingType.JPEG : 0;
+            // * Salva a imagem no Photo Album do DM
+            this.saveToPhotoAlbum: true;
+            
+            // Especifico para iOS
+            this.popoverOptions: ((typeof Camera !== "undefined") && (typeof CameraPopoverOptions !== "undefined")) ? new CameraPopoverOptions(220, 600, 320, 480, Camera.PopoverArrowDirection.ARROW_DOWN) : null;    // cameraOptions: popoverOptions
+            
             // Define qual camera usar (front ou back)
-            cameraDirection: BACK;
+            this.cameraDirection: BACK;
+            alert("p2");
          }
+         
          function capturePhoto() {
             // Captura imagem usando a camera do DM e recupera a imagem como FILE_URI
-            navigator.camera.getPicture(onPhotoSuccess, onFail, cameraOptions(1));
+            alert("p3");
+            settings.sourceType = Camera.PictureSourceType.CAMERA;
+            
+            // Chamada para o método camera.getPicture()
+            navigator.camera.getPicture(onPhotoSuccess, onFail, { quality : settings.quality, 
+                                                                    destinationType : settings.destinationType, 
+                                                                    sourceType : settings.sourceType, 
+                                                                    allowEdit : settings.allowEdit, 
+                                                                    encodingType : settings.encodingType,
+                                                                    targetWidth : settings.targetWidth,
+                                                                    targetHeight : settings.targetHeight,
+                                                                    mediaType: settings.mediaType,
+                                                                    saveToPhotoAlbum : settings.saveToPhotoAlbum,
+                                                                    correctOrientation: settings.correctOrientation,
+                                                                    popoverOptions : settings.popoverOptions
+                                                                  });
          }
          
          // Chamado quando uma foto é recuperada com sucesso
@@ -57,14 +100,18 @@
             // Mostra os elementos da imagem
             largeImage.style.display = 'block';
 
-            // MOstra a foto capturada
+            // Mostra a foto capturada
             // As regras de CSS inline são usadas para alterar o tamanho da imagem
             largeImage.src = imageURI;
           }
-
+          
+         // Called if something bad happens. 
+         function onFail(message) {
+            alert('Falhou por: ' + message);
+         }
       </script>
   </head>
-  <body onLoad="inicio;()">
+  <body onLoad="inicio();">
       <div data-role="page">
          <div data-role="header">
             <h1>Usando a Câmera</h1>
@@ -73,10 +120,12 @@
        
          <div data-role="content"> 
             <h1>Selecione uma opção.</h1>    
-            <button onclick="capturePhoto();">Capturar uma foto</button> <br>
-            <button onclick="capturePhotoEdit();">Capturar uma foto editável</button> <br>
-            <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">Biblioteca de imagens (<i>Photo Library</i>)</button><br>
-            <button onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">Álbum de fotos (<i>Photo Album</i>)</button><br>
+            <button onClick="capturePhoto();">Capturar uma foto</button> <br>
+            <!--
+            <button onClick="capturePhotoEdit();">Capturar uma foto editável</button> <br>
+            <button onClick="getPhoto(pictureSource.PHOTOLIBRARY);">Biblioteca de imagens (<i>Photo Library</i>)</button><br>
+            <button onClick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">Álbum de fotos (<i>Photo Album</i>)</button><br>
+            -->
             <p>OBS.: No Android não há direfença entre <i>Photo Library</i> e <i>Photo Album</i></p>
             <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
             <img style="display:none;" id="largeImage" src="" />
