@@ -3,21 +3,22 @@
 <html>
    <head>
       <title>Usando a Câmera do Dispositivo Móvel</title>
-      // Carrega bibliotecas da JQuery Mobile
+      
+      <!-- Carrega bibliotecas da JQuery Mobile -->
       <link rel="stylesheet" href="jquery.mobile-1.0a1.min.css" />
       <script src="jquery-1.4.3.min.js"></script>
       <script src="jquery.mobile-1.0a1.min.js"></script>
       
-      // Configura página de código - charset
+      <!-- Configura página de código - charset -->
       <meta charset="utf-8"/>
       
-      // Carrega biblioteca do PhoneGap - Cordova
+      <!-- Carrega biblioteca do PhoneGap - Cordova -->
       <script type="text/javascript" charset="utf-8" src="cordova-2.7.0.js"></script>
       
-      // Funções para uso da Câmera
+      <!-- Funções para uso da Câmera -->
       <script type="text/javascript" charset="utf-8">
          function inicio() {
-            alert("p1");
+            alert("p1-inicio");
             document.addEventListener("deviceready", onDeviceReady, false); // Aguarda o Dispositivo carregar as bibliotecas
             
             settings = new Settings();
@@ -45,33 +46,32 @@
 
             // Qualidadade da foto e opções de edição:
             // * Qualidade da câmera
-            this.quality: 100; // values [0, 100]. (Number)
+            this.quality = 100; // values [0, 100]. (Number)
             // * Largura em pixels para escalar a imagem (number)
-            this.targetWidth: 400;
+            this.targetWidth = 400;
             // * Altura em pixels para escalar a imagem (number)
-            this.targetHeight: 400;
+            this.targetHeight = 400;
             // * Permite editar a imagem antes da seleção? boolean
-            this.allowEdit: true;
+            this.allowEdit = true;
             // * Rotaciona a imagem para corrigir pela orientação do DM
-            this.correctOrientation: true;
+            this.correctOrientation = true;
 
             // Opções para salvamento:
             // * JPGE ou PNG
-            this.encodingType: (typeof Camera !== "undefined") ? Camera.EncodingType.JPEG : 0;
+            this.encodingType = (typeof Camera !== "undefined") ? Camera.EncodingType.JPEG : 0;
             // * Salva a imagem no Photo Album do DM
-            this.saveToPhotoAlbum: true;
+            this.saveToPhotoAlbum = true;
             
             // Especifico para iOS
-            this.popoverOptions: ((typeof Camera !== "undefined") && (typeof CameraPopoverOptions !== "undefined")) ? new CameraPopoverOptions(220, 600, 320, 480, Camera.PopoverArrowDirection.ARROW_DOWN) : null;    // cameraOptions: popoverOptions
+            this.popoverOptions = ((typeof Camera !== "undefined") && (typeof CameraPopoverOptions !== "undefined")) ? new CameraPopoverOptions(220, 600, 320, 480, Camera.PopoverArrowDirection.ARROW_DOWN) : null;    // cameraOptions: popoverOptions
             
             // Define qual camera usar (front ou back)
-            this.cameraDirection: BACK;
-            alert("p2");
+            //this.cameraDirection = BACK;
          }
          
          function capturePhoto() {
             // Captura imagem usando a camera do DM e recupera a imagem como FILE_URI
-            alert("p3");
+            alert("p3-capturePhoto");
             settings.sourceType = Camera.PictureSourceType.CAMERA;
             
             // Chamada para o método camera.getPicture()
@@ -91,6 +91,7 @@
          
          // Chamado quando uma foto é recuperada com sucesso
          function onPhotoSuccess(imageURI) {
+            alert("p4-photoSucess");
             // Descomente a linha abaixo para ver a URI do arquivo da imagem
             console.log(imageURI);
 
