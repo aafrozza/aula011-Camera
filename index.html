@@ -18,8 +18,8 @@
       <!-- Funções para uso da Câmera -->
       <script type="text/javascript" charset="utf-8">
          function inicio() {
-            alert("p1-inicio");
-            document.addEventListener("deviceready", onDeviceReady, false); // Aguarda o Dispositivo carregar as bibliotecas
+            //alert("p1-inicio");  OK
+            //document.addEventListener("deviceready", onDeviceReady, false); // Aguarda o Dispositivo carregar as bibliotecas
             
             settings = new Settings();
          }
@@ -71,7 +71,7 @@
          
          function capturePhoto() {
             // Captura imagem usando a camera do DM e recupera a imagem como FILE_URI
-            alert("p3-capturePhoto");
+            //alert("p3-capturePhoto"); OK
             settings.sourceType = Camera.PictureSourceType.CAMERA;
             
             // Chamada para o método camera.getPicture()
